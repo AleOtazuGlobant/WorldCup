@@ -27,6 +27,9 @@ public class JugadorModel {
 	private String pasaporte;
 	 
 	 
+	public JugadorModel() {
+		super();
+	}
 	public JugadorModel(Long id, @NotEmpty(message = "El campo nombre no puede estar vacio") String nombre,
 			@NotEmpty(message = "El campo apellido no puede estar vacio") String apellido,
 			@NotEmpty(message = "El campo pais no puede estar vacio") String pais,

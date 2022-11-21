@@ -12,5 +12,8 @@ import com.WorldCup.demo.models.JugadorModel;
 @Repository
 public interface JugadorRepository extends CrudRepository <JugadorModel, Long> {
 	public abstract ArrayList<JugadorModel> findByPais( String pais);
+	public abstract JugadorModel findByPasaporte( String pasaporte);
 
 }
+
+
