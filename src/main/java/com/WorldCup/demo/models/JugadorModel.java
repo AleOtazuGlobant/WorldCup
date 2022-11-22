@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+
+
 @Entity
 @Table(name= "jugadores")
 public class JugadorModel {
@@ -26,11 +28,17 @@ public class JugadorModel {
 	@Size(min = 9, message = "Pasaporte debe tener al menos 9 caracteres")
 	private String pasaporte;
 	 
-	 
+	
+	@ManyToOne()
+	@JoinColumn(name = "equipo_id")
+	private EquipoModel equipo;
+	
+	
+	
 	public JugadorModel() {
 		super();
 	}
-	public JugadorModel(Long id, @NotEmpty(message = "El campo nombre no puede estar vacio") String nombre,
+	public JugadorModel(EquipoModel equipo, Long id, @NotEmpty(message = "El campo nombre no puede estar vacio") String nombre,
 			@NotEmpty(message = "El campo apellido no puede estar vacio") String apellido,
 			@NotEmpty(message = "El campo pais no puede estar vacio") String pais,
 			@NotEmpty @Size(min = 9, message = "Pasaporte debe tener al menos 9 caracteres") String pasaporte) {
@@ -39,10 +47,17 @@ public class JugadorModel {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.pais = pais;
+		this.equipo = equipo;
 		this.pasaporte = pasaporte;
 	}
 	public Long getId() {
 		return id;
+	}
+	public void setEquipo(EquipoModel equipo) {
+		this.equipo = equipo;
+	}
+	public EquipoModel getEquipo() {
+		return equipo;
 	}
 	public void setId(Long id) {
 		this.id = id;

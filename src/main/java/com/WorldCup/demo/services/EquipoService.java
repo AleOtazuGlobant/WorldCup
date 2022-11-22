@@ -28,7 +28,7 @@ public class EquipoService {
 		return equipoRepository.findById(id);
 	}
 	
-	public ArrayList<EquipoModel>obtenerEquipoPorPais(String pais){
+	public EquipoModel obtenerEquipoPorPais(String pais){
 		return equipoRepository.findByPais(pais);
 	}
 	
@@ -40,5 +40,9 @@ public class EquipoService {
 				return false;
 			}
 
+	}
+	
+	public boolean existeEquipo (String pais) {
+		return equipoRepository.existsByPais(pais);
 	}
 }

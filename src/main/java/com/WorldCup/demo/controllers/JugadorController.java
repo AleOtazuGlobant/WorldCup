@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.JugadorModel;
+import com.WorldCup.demo.services.EquipoService;
 import com.WorldCup.demo.services.JugadorService;
 
 @Validated
@@ -30,6 +31,8 @@ public class JugadorController {
 	
 	@Autowired
 	JugadorService jugadorService;
+	@Autowired
+	EquipoService equipoService;
 	
 	@GetMapping()
 	public ArrayList<JugadorModel> obtenerJugadores(){
@@ -38,12 +41,29 @@ public class JugadorController {
 		
 	@PostMapping()
 	public ResponseEntity<JugadorModel> guardarJugador (@RequestBody @Valid JugadorModel jugador) {
+	
 		JugadorModel existente = this.jugadorService.obtenerPorPasaporte(jugador.getPasaporte());
 		if(existente != null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}else {
-			JugadorModel j = this.jugadorService.guardarJugador(jugador);
-			return ResponseEntity.status(HttpStatus.CREATED).body(j);
+			Long cantJugadores= this.jugadorService.contarPorPais(jugador.getPais());
+			
+			if(cantJugadores == 26) {
+				
+				 System.out.println ("El equipo ya tiene el maximo de jugadores");
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}else {
+				EquipoModel equipo = this.equipoService.obtenerEquipoPorPais(jugador.getPais());
+				if (equipo != null) {			
+					jugador.setEquipo(equipo);
+				}
+				
+				JugadorModel jugadorNuevo = this.jugadorService.guardarJugador(jugador);
+				
+				return ResponseEntity.status(HttpStatus.CREATED).body(jugadorNuevo);
+			}
+			
+						
 		}
 		
 	}

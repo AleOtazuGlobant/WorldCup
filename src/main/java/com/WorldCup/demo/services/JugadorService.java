@@ -22,6 +22,10 @@ public class JugadorService {
 		return jugadorRepository.save(jugador);
 	}
 	
+	public Long contarPorPais (String pais) {
+		return jugadorRepository.countByPais(pais);
+	}
+	
 	public void actualizarJugador (Long id, JugadorModel jugador) {
 		JugadorModel jugadorFromDb= jugadorRepository.findById(id).get();
 		jugadorFromDb.setNombre(jugador.getNombre());

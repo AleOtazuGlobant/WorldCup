@@ -1,7 +1,16 @@
 package com.WorldCup.demo.models;
 
 
+
+
+import java.util.List;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+
+
+
 
 @Entity
 @Table(name= "equipos")
@@ -10,11 +19,32 @@ public class EquipoModel {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    @Column(unique = true, nullable = false)
 	    private Long id;
-
+	 	
+	 	@NotEmpty(message = "El campo pais no puede estar vacio")
 	    private String pais;
+	    
+	 
+	    @OneToMany( cascade= CascadeType.ALL, orphanRemoval = true)
+	    @JoinColumn (name = "equipo_id")
+	    private List<JugadorModel> jugadores;
+	 	
+	 	
+	    
 
 		public Long getId() {
 			return id;
+		}
+
+		public EquipoModel() {
+			super();
+		}
+
+		public EquipoModel(Long id, @NotEmpty(message = "El campo pais no puede estar vacio") String pais,
+				List<JugadorModel> jugadores) {
+			super();
+			this.id = id;
+			this.pais = pais;
+			this.jugadores = jugadores;
 		}
 
 		public void setId(Long id) {
@@ -27,6 +57,11 @@ public class EquipoModel {
 
 		public void setPais(String pais) {
 			this.pais = pais;
+		}
+   //agragdo 21/11
+		public void setJugadores(List<JugadorModel> jugPorPais) {
+			// TODO Auto-generated method stub
+			this.jugadores= jugPorPais;
 		}
 	   
 	
