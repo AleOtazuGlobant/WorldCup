@@ -24,13 +24,10 @@ public class EquipoModel {
 	    private String pais;
 	    
 	 
-	    @OneToMany( cascade= CascadeType.ALL, orphanRemoval = true)
-	    @JoinColumn (name = "equipo_id")
+	    @OneToMany(mappedBy="equipo", cascade = CascadeType.ALL)
 	    private List<JugadorModel> jugadores;
-	 	
-	 	
+	 		
 	    
-
 		public Long getId() {
 			return id;
 		}
@@ -58,10 +55,17 @@ public class EquipoModel {
 		public void setPais(String pais) {
 			this.pais = pais;
 		}
-   //agragdo 21/11
+  
 		public void setJugadores(List<JugadorModel> jugPorPais) {
 			// TODO Auto-generated method stub
 			this.jugadores= jugPorPais;
+			for(JugadorModel jugador: jugPorPais) {
+				jugador.setEquipo(this);
+			}
+		}
+
+		public List<JugadorModel> getJugadores() {
+			return jugadores;
 		}
 	   
 	

@@ -28,6 +28,13 @@ public class EquipoService {
 		return equipoRepository.findById(id);
 	}
 	
+	public void actualizarEquipo (Long id, EquipoModel equipo) {
+		EquipoModel equipoFromDb= equipoRepository.findById(id).get();
+		
+		equipoFromDb.setPais(equipo.getPais());
+		equipoRepository.save(equipoFromDb);
+	}
+	
 	public EquipoModel obtenerEquipoPorPais(String pais){
 		return equipoRepository.findByPais(pais);
 	}
@@ -37,6 +44,7 @@ public class EquipoService {
 			equipoRepository.deleteById(id);
 			return true;
 			} catch(Exception err) {
+				System.out.println(err.toString());
 				return false;
 			}
 

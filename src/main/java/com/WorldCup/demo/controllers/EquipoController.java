@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,7 +67,7 @@ public class EquipoController {
 	 
 	}
 	
-
+	
 	@GetMapping( path = "/{id}")
 	public Optional<EquipoModel>obtenerEquipoPorId(@PathVariable ("id") Long id){
 		return this.equipoService.obtenerPorId(id);
@@ -86,6 +87,16 @@ public class EquipoController {
 		}else {
 			return "No se pudo eliminar el equipo con id: " + id;
 		}
+	}
+	
+	
+	@PutMapping( path = "/{id}")
+	public ResponseEntity<Optional<EquipoModel>>actualizarEquipo(@PathVariable ("id") Long id,@RequestBody EquipoModel equipo) {
+		this.equipoService.actualizarEquipo(id,equipo);
+	
+		Optional<EquipoModel>eq = this.equipoService.obtenerPorId(id);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(eq);	 
 	}
 	
 

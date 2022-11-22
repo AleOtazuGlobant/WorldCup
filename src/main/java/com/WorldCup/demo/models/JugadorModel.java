@@ -4,6 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 
 
 @Entity
@@ -29,8 +32,9 @@ public class JugadorModel {
 	private String pasaporte;
 	 
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "equipo_id")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private EquipoModel equipo;
 	
 	
