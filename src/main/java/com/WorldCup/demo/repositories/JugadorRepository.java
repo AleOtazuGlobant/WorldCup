@@ -14,6 +14,7 @@ public interface JugadorRepository extends CrudRepository <JugadorModel, Long> {
 	public abstract ArrayList<JugadorModel> findByPais( String pais);
 	public abstract JugadorModel findByPasaporte( String pasaporte);
 	public abstract Long countByPais( String pais);
+	
 
 }
 

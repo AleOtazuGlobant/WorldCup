@@ -1,7 +1,7 @@
 package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.JugadorModel;
+
 import com.WorldCup.demo.repositories.JugadorRepository;
 
 @Service
 public class JugadorService {
 	@Autowired	
 	JugadorRepository jugadorRepository;
+	
 	
 	public ArrayList<JugadorModel> obtenerJugadores(){
 		return (ArrayList<JugadorModel>) jugadorRepository.findAll();
@@ -52,11 +54,20 @@ public class JugadorService {
 	}
 	
 	public boolean eliminarJugador (Long id) {
+		JugadorModel jugFromDb= jugadorRepository.findById(id).get();
+		EquipoModel equipoDelJugador = jugFromDb.getEquipo();
 		try {
 //			chekear si tiene equipo
 //			si no tiene equipo, eliminar
 //			si tiene equipo, eliminar solo, si la cantidad de jugadores en el equipo es mayor a 11
 			
+			
+			if (equipoDelJugador!=null) {
+				if (equipoDelJugador.getCantJugadores()==11) {
+					
+					return false;
+				};
+			};
 			
 			jugadorRepository.deleteById(id);
 			return true;

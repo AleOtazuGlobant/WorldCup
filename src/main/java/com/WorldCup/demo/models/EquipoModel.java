@@ -67,6 +67,9 @@ public class EquipoModel {
 		public List<JugadorModel> getJugadores() {
 			return jugadores;
 		}
-	   
+	   public int getCantJugadores() {
+		  return jugadores.size();
+		   
+	   }
 	
 }
