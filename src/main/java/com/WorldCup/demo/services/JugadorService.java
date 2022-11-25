@@ -57,10 +57,7 @@ public class JugadorService {
 		JugadorModel jugFromDb= jugadorRepository.findById(id).get();
 		EquipoModel equipoDelJugador = jugFromDb.getEquipo();
 		try {
-//			chekear si tiene equipo
-//			si no tiene equipo, eliminar
-//			si tiene equipo, eliminar solo, si la cantidad de jugadores en el equipo es mayor a 11
-			
+//					
 			
 			if (equipoDelJugador!=null) {
 				if (equipoDelJugador.getCantJugadores()==11) {
