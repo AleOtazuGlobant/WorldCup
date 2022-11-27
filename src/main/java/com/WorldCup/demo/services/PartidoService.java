@@ -2,12 +2,10 @@ package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
 import com.WorldCup.demo.models.PartidoModel;
+import com.WorldCup.demo.repositories.EquipoRepository;
 import com.WorldCup.demo.repositories.PartidoRepository;
 
 
@@ -17,6 +15,8 @@ public class PartidoService {
 	
 	@Autowired
 	PartidoRepository partidoRepository;
+	@Autowired
+	EquipoRepository equipoRepository;
 	
 	public ArrayList<PartidoModel> obtenerPartidos(){
 		
@@ -59,4 +59,47 @@ public class PartidoService {
 
 	}
 
-}
+	
+
+	public PartidoModel obtenerResultadoPartido(String resultado) {
+		return partidoRepository.findByResultado(resultado);
+	}
+	
+	public String simularPartido(String resultado) {
+		
+		int puntaje1=0;
+		int puntaje2=0;
+		String	resul="";
+		String puntos= "";
+			
+		int goles_equipo1= (int)(Math.random()*5);
+		int goles_equipo2= (int)(Math.random()*5);
+		
+		if (goles_equipo2==goles_equipo1){
+				puntaje1+=1;
+				puntaje2+=1;
+				resul= " Empate";
+				puntos= " Ambos equipos suman " +String.valueOf(puntaje1)+ " punto" ;
+		}
+		else if (goles_equipo1>goles_equipo2) {
+			puntaje1+=3;
+			
+			resul= " Gana el equipo 1";
+			puntos= " Sumando "+String.valueOf(puntaje1)+" puntos";
+		}else {
+			puntaje2+=3;
+			resul= " Gana el equipo 2";
+			puntos= " Sumando "+String.valueOf(puntaje2)+" puntos";
+		}
+		
+		resultado = (String.valueOf(goles_equipo1)+" - "+String.valueOf(goles_equipo2)+resul+ puntos
+		);
+		return resultado;
+			
+	}
+		
+	}
+		
+
+	
+	
