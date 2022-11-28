@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.PartidoModel;
 import com.WorldCup.demo.repositories.EquipoRepository;
 import com.WorldCup.demo.repositories.PartidoRepository;
@@ -17,6 +19,8 @@ public class PartidoService {
 	PartidoRepository partidoRepository;
 	@Autowired
 	EquipoRepository equipoRepository;
+	@Autowired
+	EquipoService equipoService;
 	
 	public ArrayList<PartidoModel> obtenerPartidos(){
 		
@@ -65,12 +69,16 @@ public class PartidoService {
 		return partidoRepository.findByResultado(resultado);
 	}
 	
-	public String simularPartido(String resultado) {
-		
+	public PartidoModel simularPartido(Long id) {
+		PartidoModel match= partidoRepository.findById(id).get();
+		Optional<EquipoModel> equipoUno= equipoService.obtenerPorId(match.getEquipo1_id());
+		Optional<EquipoModel> equipoDos= equipoService.obtenerPorId(match.getEquipo2_id());
+		EquipoModel equipo1 = equipoUno.get();
+		EquipoModel equipo2 = equipoDos.get();
 		int puntaje1=0;
 		int puntaje2=0;
 		String	resul="";
-		String puntos= "";
+		
 			
 		int goles_equipo1= (int)(Math.random()*5);
 		int goles_equipo2= (int)(Math.random()*5);
@@ -79,22 +87,36 @@ public class PartidoService {
 				puntaje1+=1;
 				puntaje2+=1;
 				resul= " Empate";
-				puntos= " Ambos equipos suman " +String.valueOf(puntaje1)+ " punto" ;
+				
 		}
 		else if (goles_equipo1>goles_equipo2) {
 			puntaje1+=3;
 			
 			resul= " Gana el equipo 1";
-			puntos= " Sumando "+String.valueOf(puntaje1)+" puntos";
+			
 		}else {
 			puntaje2+=3;
 			resul= " Gana el equipo 2";
-			puntos= " Sumando "+String.valueOf(puntaje2)+" puntos";
+			
 		}
 		
-		resultado = (String.valueOf(goles_equipo1)+" - "+String.valueOf(goles_equipo2)+resul+ puntos
-		);
-		return resultado;
+		match.setGoles_equipo1(goles_equipo1);
+		match.setGoles_equipo2(goles_equipo2);
+		match.setNombre_equipo1(equipoUno.get().getPais());
+		match.setNombre_equipo2(equipoDos.get().getPais());
+		match.setResultado(resul);
+		partidoRepository.save(match);
+		
+		
+		equipo1.setPuntos(equipo1.getPuntos()+puntaje1);
+		equipo2.setPuntos(equipo2.getPuntos()+puntaje2);
+		equipoRepository.save(equipo1);
+		equipoRepository.save(equipo2);
+		System.out.println("Resultado:  "+ resul);
+		System.out.println("Puntos equipo 1:  "+ puntaje1);
+		System.out.println("Puntos equipo 2:  "+ puntaje2);
+		
+		return match;
 			
 	}
 		

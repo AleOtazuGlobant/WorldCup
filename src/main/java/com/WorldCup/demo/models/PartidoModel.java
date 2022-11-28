@@ -2,6 +2,8 @@ package com.WorldCup.demo.models;
 
 import javax.persistence.*;
 
+
+
 @Entity
 @Table(name= "partidos")
 public class PartidoModel {
@@ -38,7 +40,8 @@ public class PartidoModel {
 		this.resultado = resultado;
 		
 	}
-
+	
+	
 
 
 	public PartidoModel(String nombre_equipo1, String nombre_equipo2) {

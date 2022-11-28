@@ -22,10 +22,15 @@ public class EquipoModel {
 	 	
 	 	@NotEmpty(message = "El campo pais no puede estar vacio")
 	    private String pais;
+	 	
+	 	
+	    private int puntos;
 	    
 	 
 	    @OneToMany(mappedBy="equipo", cascade = CascadeType.ALL)
 	    private List<JugadorModel> jugadores;
+	    
+	   
 	 		
 	    
 		public Long getId() {
@@ -36,11 +41,13 @@ public class EquipoModel {
 			super();
 		}
 
-		public EquipoModel(Long id, @NotEmpty(message = "El campo pais no puede estar vacio") String pais,
+		
+		public EquipoModel(Long id, @NotEmpty(message = "El campo pais no puede estar vacio") String pais, int puntos,
 				List<JugadorModel> jugadores) {
 			super();
 			this.id = id;
 			this.pais = pais;
+			this.puntos = puntos;
 			this.jugadores = jugadores;
 		}
 
@@ -71,5 +78,13 @@ public class EquipoModel {
 		  return jugadores.size();
 		   
 	   }
+
+	public int getPuntos() {
+		return puntos;
+	}
+
+	public void setPuntos(int puntos) {
+		this.puntos = puntos;
+	}
 	
 }
