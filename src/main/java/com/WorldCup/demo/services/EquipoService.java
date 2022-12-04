@@ -7,14 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.WorldCup.demo.models.EquipoModel;
-
+import com.WorldCup.demo.models.GrupoModel;
 import com.WorldCup.demo.repositories.EquipoRepository;
+import com.WorldCup.demo.repositories.GrupoRepository;
 
 @Service 
 public class EquipoService {
 	@Autowired
 	EquipoRepository equipoRepository;
-	
+	@Autowired
+	GrupoRepository grupoRepository;
 	
 	
 	public ArrayList<EquipoModel>obtenerEquipos(){
@@ -24,15 +26,20 @@ public class EquipoService {
 	public EquipoModel guardarEquipo(EquipoModel equipo) {
 		return equipoRepository.save(equipo);
 	}
-	public Optional<EquipoModel>obtenerPorId(Long id){
+	public Optional<EquipoModel> obtenerPorId(Long id){
 		return equipoRepository.findById(id);
 	}
 	
 	public void actualizarEquipo (Long id, EquipoModel equipo) {
-		EquipoModel equipoFromDb= equipoRepository.findById(id).get();
+		Optional<EquipoModel> equipoFromDb = equipoRepository.findById(id);
+		Optional<GrupoModel> g = grupoRepository.findById(equipo.getGrupo().getId());
 		
-		equipoFromDb.setPais(equipo.getPais());
-		equipoRepository.save(equipoFromDb);
+		EquipoModel eq = equipoFromDb.get();
+		
+		eq.setPais(equipo.getPais());
+		eq.setGrupo(g.get());
+		
+		equipoRepository.save(eq);
 	}
 	
 	public EquipoModel obtenerEquipoPorPais(String pais){
@@ -52,5 +59,9 @@ public class EquipoService {
 	
 	public boolean existeEquipo (String pais) {
 		return equipoRepository.existsByPais(pais);
+	}
+	
+	public boolean existeEquipoPorId (Long id) {
+		return equipoRepository.existsById(id);
 	}
 }

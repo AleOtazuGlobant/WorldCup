@@ -42,11 +42,13 @@ public class EquipoController {
 		
 	@PostMapping()
 	public ResponseEntity<EquipoModel> guardarEquipo(@RequestBody @Valid EquipoModel equipo) {
-	    Long cantidadJugadores= this.jugadorService.contarPorPais(equipo.getPais());
-		    
+	  Long cantidadJugadores= this.jugadorService.contarPorPais(equipo.getPais());
+	  Boolean equipoExistente= this.equipoService.existeEquipo(equipo.getPais());
+	  System.out.println ("Ya esxiste el pais? " + equipoExistente);
 	    System.out.println ("Jugadores existentes " + cantidadJugadores);
 	    
-	    if (this.equipoService.existeEquipo(equipo.getPais())) {
+	    if (equipoExistente) {
+	    	
 	    	System.out.println ("El pais que desea cargar ya se encuentra registrado");
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	    }
@@ -59,7 +61,7 @@ public class EquipoController {
 	   		return ResponseEntity.status(HttpStatus.CREATED).body(this.equipoService.guardarEquipo(equipo));
 	    }else {
 	    	
-	    	System.out.println ("La cantidad min de jugadores es 11 y la maxima 26");
+	    	System.out.println ("La cantidad de jugadores es incorrecta: necesita min 11 y maximo 26");
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	    			    	
 	    }
@@ -69,7 +71,7 @@ public class EquipoController {
 	
 	
 	@GetMapping( path = "/{id}")
-	public Optional<EquipoModel>obtenerEquipoPorId(@PathVariable ("id") Long id){
+	public Optional<EquipoModel> obtenerEquipoPorId(@PathVariable ("id") Long id){
 		return this.equipoService.obtenerPorId(id);
 	}
 	
@@ -91,10 +93,10 @@ public class EquipoController {
 	
 	
 	@PutMapping( path = "/{id}")
-	public ResponseEntity<Optional<EquipoModel>>actualizarEquipo(@PathVariable ("id") Long id,@RequestBody EquipoModel equipo) {
-		this.equipoService.actualizarEquipo(id,equipo);
+	public ResponseEntity<Optional<EquipoModel>>actualizarEquipo(@PathVariable ("id") Long id, @RequestBody EquipoModel equipo) {
+		this.equipoService.actualizarEquipo(id, equipo);
 	
-		Optional<EquipoModel>eq = this.equipoService.obtenerPorId(id);
+		Optional<EquipoModel> eq = this.equipoService.obtenerPorId(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(eq);	 
 	}

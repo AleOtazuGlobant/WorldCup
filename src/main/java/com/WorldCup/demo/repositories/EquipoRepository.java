@@ -14,6 +14,5 @@ public interface EquipoRepository extends CrudRepository<EquipoModel, Long> {
 	public abstract EquipoModel findByPais( String pais);
 	public abstract Optional<EquipoModel> findById( Long id);
 	Boolean existsByPais(String pais);
-
 	
 }

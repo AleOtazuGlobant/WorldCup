@@ -1,12 +1,9 @@
 package com.WorldCup.demo.models;
 
-
-
-
 import java.util.List;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+
 
 
 
@@ -15,6 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Table(name= "equipos")
 public class EquipoModel {
+	
 	 	@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    @Column(unique = true, nullable = false)
@@ -23,32 +21,41 @@ public class EquipoModel {
 	 	@NotEmpty(message = "El campo pais no puede estar vacio")
 	    private String pais;
 	 	
-	 	
 	    private int puntos;
 	    
-	 
 	    @OneToMany(mappedBy="equipo", cascade = CascadeType.ALL)
 	    private List<JugadorModel> jugadores;
 	    
-	   
-	 		
-	    
-		public Long getId() {
-			return id;
-		}
-
+	    @OneToOne(cascade = CascadeType.ALL, optional = true)
+	    @JoinColumn(name= "grupo_id")
+	    private GrupoModel grupo;
+	   	    	   
+			   
 		public EquipoModel() {
 			super();
 		}
 
-		
 		public EquipoModel(Long id, @NotEmpty(message = "El campo pais no puede estar vacio") String pais, int puntos,
-				List<JugadorModel> jugadores) {
+				List<JugadorModel> jugadores, GrupoModel grupo) {
 			super();
 			this.id = id;
 			this.pais = pais;
 			this.puntos = puntos;
 			this.jugadores = jugadores;
+			this.grupo = grupo;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+
+		public GrupoModel getGrupo() {
+			return grupo;
+		}
+
+		public void setGrupo(GrupoModel grupo) {
+			this.grupo = grupo;
 		}
 
 		public void setId(Long id) {

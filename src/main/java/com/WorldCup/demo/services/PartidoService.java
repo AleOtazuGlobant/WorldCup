@@ -75,6 +75,8 @@ public class PartidoService {
 		Optional<EquipoModel> equipoDos= equipoService.obtenerPorId(match.getEquipo2_id());
 		EquipoModel equipo1 = equipoUno.get();
 		EquipoModel equipo2 = equipoDos.get();
+		String equipo1Pais = equipoUno.get().getPais();
+		String equipo2Pais = equipoDos.get().getPais();
 		int puntaje1=0;
 		int puntaje2=0;
 		String	resul="";
@@ -86,17 +88,17 @@ public class PartidoService {
 		if (goles_equipo2==goles_equipo1){
 				puntaje1+=1;
 				puntaje2+=1;
-				resul= " Empate";
+				resul = "Empate";
 				
 		}
 		else if (goles_equipo1>goles_equipo2) {
 			puntaje1+=3;
 			
-			resul= " Gana el equipo 1";
+			resul = "Gana " + equipo1Pais;
 			
 		}else {
 			puntaje2+=3;
-			resul= " Gana el equipo 2";
+			resul = "Gana " + equipo2Pais;
 			
 		}
 		
