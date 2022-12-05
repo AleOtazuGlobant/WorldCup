@@ -3,10 +3,7 @@ package com.WorldCup.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.JugadorModel;
 import com.WorldCup.demo.services.EquipoService;
@@ -38,12 +34,11 @@ public class EquipoController {
 	public  ArrayList<EquipoModel> obtenerEquipos(){
 		return equipoService.obtenerEquipos();
 	}
-	
-		
+			
 	@PostMapping()
 	public ResponseEntity<EquipoModel> guardarEquipo(@RequestBody @Valid EquipoModel equipo) {
-	  Long cantidadJugadores= this.jugadorService.contarPorPais(equipo.getPais());
-	  Boolean equipoExistente= this.equipoService.existeEquipo(equipo.getPais());
+	  Long cantidadJugadores = this.jugadorService.contarPorPais(equipo.getPais());
+	  Boolean equipoExistente = this.equipoService.existeEquipo(equipo.getPais());
 	  System.out.println ("Ya esxiste el pais? " + equipoExistente);
 	    System.out.println ("Jugadores existentes " + cantidadJugadores);
 	    
@@ -65,10 +60,8 @@ public class EquipoController {
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	    			    	
 	    }
-	
-	 
+		 
 	}
-	
 	
 	@GetMapping( path = "/{id}")
 	public Optional<EquipoModel> obtenerEquipoPorId(@PathVariable ("id") Long id){
@@ -90,8 +83,7 @@ public class EquipoController {
 			return "No se pudo eliminar el equipo con id: " + id;
 		}
 	}
-	
-	
+		
 	@PutMapping( path = "/{id}")
 	public ResponseEntity<Optional<EquipoModel>>actualizarEquipo(@PathVariable ("id") Long id, @RequestBody EquipoModel equipo) {
 		this.equipoService.actualizarEquipo(id, equipo);

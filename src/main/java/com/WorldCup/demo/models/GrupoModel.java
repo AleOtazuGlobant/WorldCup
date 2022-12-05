@@ -4,24 +4,14 @@ package com.WorldCup.demo.models;
 
 
 import java.util.List;
-
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-
-
-
-
-
 
 
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
-@Table(name= "grupos")
+@Table(name = "grupos")
 public class GrupoModel {
 	 	@Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,16 +22,11 @@ public class GrupoModel {
 	 	
 		private boolean jugado;
 		
-	 	
 	 	@JsonIgnore
-	 	//aca agregue fetch hora 00.17
-	 	@OneToMany(mappedBy="grupo", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	 
+	 	@OneToMany(mappedBy ="grupo", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	 	private List<EquipoModel> equipos;
 	 	
-	
-		
-
-
 		public boolean isJugado() {
 			return jugado;
 		}
@@ -85,9 +70,7 @@ public class GrupoModel {
 
 		public void setNombre(String nombre) {
 			this.nombre = nombre;
-		}
-	 	
-	 	
+		}	 	
 		
 	
 }

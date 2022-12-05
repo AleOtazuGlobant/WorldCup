@@ -1,15 +1,11 @@
 package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
-
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.JugadorModel;
-
 import com.WorldCup.demo.repositories.JugadorRepository;
 
 @Service
@@ -28,11 +24,10 @@ public class JugadorService {
 	
 	public Long contarPorPais (String pais) {
 		return jugadorRepository.countByPais(pais);
-	}
-	
+	}	
 	
 	public void actualizarJugador (Long id, JugadorModel jugador) {
-		JugadorModel jugadorFromDb= jugadorRepository.findById(id).get();
+		JugadorModel jugadorFromDb = jugadorRepository.findById(id).get();
 		jugadorFromDb.setNombre(jugador.getNombre());
 		jugadorFromDb.setApellido(jugador.getApellido());
 		jugadorFromDb.setPais(jugador.getPais());
@@ -54,12 +49,11 @@ public class JugadorService {
 	}
 	
 	public boolean eliminarJugador (Long id) {
-		JugadorModel jugFromDb= jugadorRepository.findById(id).get();
+		JugadorModel jugFromDb = jugadorRepository.findById(id).get();
 		EquipoModel equipoDelJugador = jugFromDb.getEquipo();
 		try {
-//					
 			
-			if (equipoDelJugador!=null) {
+			if (equipoDelJugador != null) {
 				if (equipoDelJugador.getCantJugadores()==11) {
 					
 					return false;

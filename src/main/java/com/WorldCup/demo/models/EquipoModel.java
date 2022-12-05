@@ -5,12 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 
-
-
-
-
 @Entity
-@Table(name= "equipos")
+@Table(name = "equipos")
 public class EquipoModel {
 	
 	 	@Id
@@ -23,11 +19,11 @@ public class EquipoModel {
 	 	
 	    private int puntos;
 	    
-	    @OneToMany(mappedBy="equipo", cascade = CascadeType.ALL)
+	    @OneToMany(mappedBy ="equipo", cascade = CascadeType.ALL)
 	    private List<JugadorModel> jugadores;
 	    
 	    @OneToOne(cascade = CascadeType.ALL, optional = true)
-	    @JoinColumn(name= "grupo_id")
+	    @JoinColumn(name = "grupo_id")
 	    private GrupoModel grupo;
 	   	    	   
 			   
@@ -48,7 +44,6 @@ public class EquipoModel {
 		public Long getId() {
 			return id;
 		}
-
 
 		public GrupoModel getGrupo() {
 			return grupo;
@@ -86,12 +81,11 @@ public class EquipoModel {
 		   
 	   }
 
-	public int getPuntos() {
-		return puntos;
-	}
-
-	public void setPuntos(int puntos) {
-		this.puntos = puntos;
-	}
+		public int getPuntos() {
+			return puntos;
+		}
 	
+		public void setPuntos(int puntos) {
+			this.puntos = puntos;
+		}		
 }

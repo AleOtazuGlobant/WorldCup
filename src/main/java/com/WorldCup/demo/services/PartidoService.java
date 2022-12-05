@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.PartidoModel;
 import com.WorldCup.demo.repositories.EquipoRepository;
 import com.WorldCup.demo.repositories.PartidoRepository;
-
 
 
 @Service
@@ -25,8 +23,7 @@ public class PartidoService {
 	public ArrayList<PartidoModel> obtenerPartidos(){
 		
 		return (ArrayList<PartidoModel>) partidoRepository.findAll();
-		
-		
+			
 	}
 	
 	public PartidoModel guardarPartido(PartidoModel partido) {
@@ -38,7 +35,8 @@ public class PartidoService {
 	}
 	
 	public void actualizarPartido (Long id, PartidoModel partido) {
-		PartidoModel encuentro= partidoRepository.findById(id).get();
+		PartidoModel encuentro = partidoRepository.findById(id).get();
+		
 		encuentro.setNombre_equipo1(partido.getNombre_equipo1());
 		encuentro.setNombre_equipo2(partido.getNombre_equipo2());
 		encuentro.setEquipo1_id(partido.getEquipo1_id());
@@ -50,8 +48,6 @@ public class PartidoService {
 		
 	}
 	
-	
-
 	public boolean eliminarPartido (Long id) {
 		try {
 			partidoRepository.deleteById(id);
@@ -63,41 +59,39 @@ public class PartidoService {
 
 	}
 
-	
-
 	public PartidoModel obtenerResultadoPartido(String resultado) {
 		return partidoRepository.findByResultado(resultado);
 	}
 	
 	public PartidoModel simularPartido(Long id) {
-		PartidoModel match= partidoRepository.findById(id).get();
-		Optional<EquipoModel> equipoUno= equipoService.obtenerPorId(match.getEquipo1_id());
-		Optional<EquipoModel> equipoDos= equipoService.obtenerPorId(match.getEquipo2_id());
+		PartidoModel match = partidoRepository.findById(id).get();
+		Optional<EquipoModel> equipoUno = equipoService.obtenerPorId(match.getEquipo1_id());
+		Optional<EquipoModel> equipoDos = equipoService.obtenerPorId(match.getEquipo2_id());
 		EquipoModel equipo1 = equipoUno.get();
 		EquipoModel equipo2 = equipoDos.get();
 		String equipo1Pais = equipoUno.get().getPais();
 		String equipo2Pais = equipoDos.get().getPais();
-		int puntaje1=0;
-		int puntaje2=0;
-		String	resul="";
+		int puntaje1 = 0;
+		int puntaje2 = 0;
+		String	resul = "";
 		
 			
-		int goles_equipo1= (int)(Math.random()*5);
-		int goles_equipo2= (int)(Math.random()*5);
+		int goles_equipo1 = (int)(Math.random()*5);
+		int goles_equipo2 = (int)(Math.random()*5);
 		
-		if (goles_equipo2==goles_equipo1){
-				puntaje1+=1;
-				puntaje2+=1;
+		if (goles_equipo2 == goles_equipo1){
+				puntaje1 += 1;
+				puntaje2 += 1;
 				resul = "Empate";
 				
 		}
-		else if (goles_equipo1>goles_equipo2) {
-			puntaje1+=3;
+		else if (goles_equipo1 > goles_equipo2) {
+			puntaje1 += 3;
 			
 			resul = "Gana " + equipo1Pais;
 			
 		}else {
-			puntaje2+=3;
+			puntaje2 += 3;
 			resul = "Gana " + equipo2Pais;
 			
 		}

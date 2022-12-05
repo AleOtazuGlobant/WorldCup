@@ -2,9 +2,7 @@ package com.WorldCup.demo.controllers;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.JugadorModel;
 import com.WorldCup.demo.services.EquipoService;
@@ -46,7 +43,7 @@ public class JugadorController {
 		if(existente != null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}else {
-			Long cantJugadores= this.jugadorService.contarPorPais(jugador.getPais());
+			Long cantJugadores = this.jugadorService.contarPorPais(jugador.getPais());
 			
 			if(cantJugadores == 26) {
 				
@@ -61,19 +58,17 @@ public class JugadorController {
 				JugadorModel jugadorNuevo = this.jugadorService.guardarJugador(jugador);
 				
 				return ResponseEntity.status(HttpStatus.CREATED).body(jugadorNuevo);
-			}
-			
-						
-		}
-		
+			}						
+		}		
 	}
 	
 	@PutMapping( path = "/{id}")
 	public ResponseEntity<Optional<JugadorModel>>actualizarJugador(@PathVariable ("id") Long id,@RequestBody JugadorModel jugador) {
 		 this.jugadorService.actualizarJugador(id,jugador);
+		 
 		 Optional<JugadorModel>j = this.jugadorService.obtenerPorId(id);
 		 			 
-		return ResponseEntity.status(HttpStatus.OK).body(j);	 
+		 return ResponseEntity.status(HttpStatus.OK).body(j);	 
 	}
 	
 	@GetMapping( path = "/{id}")

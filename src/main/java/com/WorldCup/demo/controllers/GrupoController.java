@@ -3,10 +3,7 @@ package com.WorldCup.demo.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.GrupoModel;
 import com.WorldCup.demo.models.PartidoModel;
@@ -62,8 +58,7 @@ public class GrupoController {
 	    	);
 	    			    	
 	    }
-	
-	 
+		 
 	}
 	
 	
@@ -85,7 +80,6 @@ public class GrupoController {
 	    	System.out.println ("Los partidos de este grupo ya fueron cargados");
 	    	
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
 		}
 				
 		List<EquipoModel> equipos= grupo.get().getEquipos();
@@ -94,14 +88,13 @@ public class GrupoController {
 		EquipoModel equipo2 = equipos.get(1);
 		EquipoModel equipo3 = equipos.get(2);
 		EquipoModel equipo4 = equipos.get(3);
-		/*return equipo1;*/
-		
+			
 //		Generar objeto de partido y guardar en la Bd
 		PartidoModel partido1 = new PartidoModel();
 		partido1.setEquipo1_id(equipo1.getId());
 		partido1.setEquipo2_id(equipo2.getId());
 		partido1 = partidoService.guardarPartido(partido1);
-//		
+	
 		PartidoModel partido2 = new PartidoModel();
 		partido2.setEquipo1_id(equipo1.getId());
 		partido2.setEquipo2_id(equipo3.getId());
@@ -127,8 +120,7 @@ public class GrupoController {
 		partido6.setEquipo2_id(equipo4.getId());
 		partido6 = partidoService.guardarPartido(partido6);
 		
-
-//		SIMULAR PARTIDO GUARDADO EN ABSE A SU id
+//		SIMULAR PARTIDO GUARDADO EN base A SU id
 		PartidoModel partido1Simulado = this.partidoService.simularPartido(partido1.getId());
 		PartidoModel partido2Simulado = this.partidoService.simularPartido(partido2.getId());
 		PartidoModel partido3Simulado = this.partidoService.simularPartido(partido3.getId());
@@ -146,12 +138,10 @@ public class GrupoController {
      	grupo.get().setJugado(true);
      	GrupoModel grup = grupo.get();
      	grupoService.guardarGrupo(grup);
-     	
-     	
-		//return partidosSimulados;
+  	
+     	//return partidosSimulados;
      	return ResponseEntity.status(HttpStatus.CREATED).body(partidosSimulados);
 	}
-	
 	
 	@DeleteMapping( path = "/{id}")
 	public String eliminarPorId(@PathVariable ("id") Long id) {
@@ -163,8 +153,7 @@ public class GrupoController {
 			return "No se pudo eliminar el grupo con id: " + id;
 		}
 	}
-	
-	
+		
 	@PutMapping( path = "/{id}")
 	public ResponseEntity<Optional<GrupoModel>>actualizarGrupo(@PathVariable ("id") Long id,@RequestBody GrupoModel grupo) {
 		this.grupoService.actualizarGrupo(id,grupo);
@@ -174,5 +163,4 @@ public class GrupoController {
 		return ResponseEntity.status(HttpStatus.OK).body(group);	 
 	}
 	
-
 }

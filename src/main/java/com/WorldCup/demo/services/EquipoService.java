@@ -2,10 +2,8 @@ package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.GrupoModel;
 import com.WorldCup.demo.repositories.EquipoRepository;
@@ -40,6 +38,7 @@ public class EquipoService {
 		eq.setGrupo(g.get());
 		
 		equipoRepository.save(eq);
+		
 	}
 	
 	public EquipoModel obtenerEquipoPorPais(String pais){

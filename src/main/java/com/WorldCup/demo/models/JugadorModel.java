@@ -3,18 +3,17 @@ package com.WorldCup.demo.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 
 
 @Entity
-@Table(name= "jugadores")
+@Table(name = "jugadores")
 public class JugadorModel {
 	
 	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true, nullable = false)
 	private Long id;
 	
@@ -46,6 +45,7 @@ public class JugadorModel {
 			@NotEmpty(message = "El campo apellido no puede estar vacio") String apellido,
 			@NotEmpty(message = "El campo pais no puede estar vacio") String pais,
 			@NotEmpty @Size(min = 9, message = "Pasaporte debe tener al menos 9 caracteres") String pasaporte) {
+		
 		super();
 		this.id = id;
 		this.nombre = nombre;

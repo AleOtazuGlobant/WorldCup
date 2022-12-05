@@ -34,24 +34,21 @@ public class PartidoController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<PartidoModel> guardarPartido(@RequestBody PartidoModel partido) {
-						
-		Boolean equipo1Exists= this.equipoService.existeEquipoPorId(partido.getEquipo1_id());
-		Boolean equipo2Exists= this.equipoService.existeEquipoPorId(partido.getEquipo2_id());
-		
-	
+	public ResponseEntity<PartidoModel> guardarPartido(@RequestBody PartidoModel partido) {					
+		Boolean equipo1Exists = this.equipoService.existeEquipoPorId(partido.getEquipo1_id());
+		Boolean equipo2Exists = this.equipoService.existeEquipoPorId(partido.getEquipo2_id());		
 		
 		 if (!equipo1Exists || !equipo2Exists) {
-			 System.out.println ("No se puede crear el partido equipo/equipos ingresados no existe");
-		    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			 //System.out.println ("No se puede crear el partido equipo/equipos ingresados no existe");
+		     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		 }
 		 
-		 if(partido.getEquipo1_id()== partido.getEquipo2_id()) {
-			System.out.println ("No se puede crear el partido con un solo equipo");
+		 if(partido.getEquipo1_id() == partido.getEquipo2_id()) {
+			//System.out.println ("No se puede crear el partido con un solo equipo");
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		    	
 	    }
-		 	System.out.println ("partido creado");
+		 	 //System.out.println ("partido creado");
 	    	 return ResponseEntity.status(HttpStatus.OK).body(this.partidoService.guardarPartido(partido));
 	    		   	        
 	}

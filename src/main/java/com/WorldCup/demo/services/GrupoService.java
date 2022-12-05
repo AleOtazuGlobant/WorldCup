@@ -2,22 +2,16 @@ package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.WorldCup.demo.models.GrupoModel;
-
-
 import com.WorldCup.demo.repositories.GrupoRepository;
 
 @Service 
 public class GrupoService {
 	@Autowired
 	GrupoRepository grupoRepository;
-	
-	
-	
+		
 	public ArrayList<GrupoModel>obtenerGrupos(){
 		return (ArrayList<GrupoModel>)grupoRepository.findAll();
 	}
@@ -30,13 +24,11 @@ public class GrupoService {
 	}
 	
 	public void actualizarGrupo (Long id, GrupoModel grupo) {
-		GrupoModel grupoFromDb= grupoRepository.findById(id).get();
+		GrupoModel grupoFromDb = grupoRepository.findById(id).get();
 		
 				grupoRepository.save(grupoFromDb);
 	}
-	
-	
-	
+			
 	public boolean eliminarGrupo (Long id) {
 		try {
 			grupoRepository.deleteById(id);
