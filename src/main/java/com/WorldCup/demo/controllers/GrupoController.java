@@ -37,6 +37,7 @@ public class GrupoController {
 	@Autowired
 	PartidoService partidoService;
 	
+
 	@GetMapping()
 	public  ArrayList<GrupoModel> obtenerGrupos(){
 		return grupoService.obtenerGrupos();
@@ -46,19 +47,7 @@ public class GrupoController {
 	@PostMapping()
 	public ResponseEntity<GrupoModel> guardarGrupo(@RequestBody @Valid GrupoModel grupo) {
 		
-		if (this.grupoService.existeGrupo(grupo.getNombre())) {
-	    	System.out.println ("El grupo que desea cargar ya se encuentra registrado");
-	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-	    } else {
-		    
-		   GrupoModel grupoNuevo = this.grupoService.guardarGrupo(grupo);
-		   
-	    	return ResponseEntity.status(HttpStatus.CREATED).body(
-	    			grupoNuevo
-	    	);
-	    			    	
-	    }
-		 
+				return grupoService.comprobarGrupo(grupo);
 	}
 	
 	

@@ -2,8 +2,15 @@ package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.WorldCup.demo.models.GrupoModel;
 import com.WorldCup.demo.repositories.GrupoRepository;
 
@@ -42,5 +49,21 @@ public class GrupoService {
 	
 	public Boolean existeGrupo (String nombre) {
 		return grupoRepository.existsByNombre(nombre);
+	}
+	public ResponseEntity<GrupoModel> comprobarGrupo(@RequestBody @Valid GrupoModel grupo) {
+		
+		if (this.existeGrupo(grupo.getNombre())) {
+			System.out.println ("El grupo que desea cargar ya se encuentra registrado");
+	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+	    	
+	    } else {
+		    
+		   GrupoModel grupoNuevo = this.guardarGrupo(grupo);
+		   
+	    	return ResponseEntity.status(HttpStatus.CREATED).body(
+	    			grupoNuevo
+	    	);
+	    			    	
+	    }
 	}
 }

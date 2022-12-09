@@ -1,7 +1,6 @@
 package com.WorldCup.demo.controllers;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.WorldCup.demo.models.EquipoModel;
-import com.WorldCup.demo.models.JugadorModel;
 import com.WorldCup.demo.services.EquipoService;
 import com.WorldCup.demo.services.JugadorService;
 
@@ -37,30 +35,9 @@ public class EquipoController {
 			
 	@PostMapping()
 	public ResponseEntity<EquipoModel> guardarEquipo(@RequestBody @Valid EquipoModel equipo) {
-	  Long cantidadJugadores = this.jugadorService.contarPorPais(equipo.getPais());
-	  Boolean equipoExistente = this.equipoService.existeEquipo(equipo.getPais());
-	  System.out.println ("Ya esxiste el pais? " + equipoExistente);
-	    System.out.println ("Jugadores existentes " + cantidadJugadores);
-	    
-	    if (equipoExistente) {
-	    	
-	    	System.out.println ("El pais que desea cargar ya se encuentra registrado");
-	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-	    }
-	    
-	    if (cantidadJugadores >= 11 & cantidadJugadores <= 26) {
-	    	   List <JugadorModel> jugPorPais = this.jugadorService.obtenerPorPais(equipo.getPais());
-	   		
-	   			equipo.setJugadores(jugPorPais); 
-	   			System.out.println ("Equipo creado");
-	   		return ResponseEntity.status(HttpStatus.CREATED).body(this.equipoService.guardarEquipo(equipo));
-	    }else {
-	    	
-	    	System.out.println ("La cantidad de jugadores es incorrecta: necesita min 11 y maximo 26");
-	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-	    			    	
-	    }
-		 
+
+		return equipoService.verificarJugadores(equipo);
+	 
 	}
 	
 	@GetMapping( path = "/{id}")
