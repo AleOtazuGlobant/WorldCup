@@ -66,7 +66,7 @@ public class EquipoModel {
 		}
   
 		public void setJugadores(List<JugadorModel> jugPorPais) {
-			// TODO Auto-generated method stub
+			
 			this.jugadores= jugPorPais;
 			for(JugadorModel jugador: jugPorPais) {
 				jugador.setEquipo(this);

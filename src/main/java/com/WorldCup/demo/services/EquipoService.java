@@ -35,7 +35,7 @@ public class EquipoService {
 	public Optional<EquipoModel> obtenerPorId(Long id){
 		return equipoRepository.findById(id);
 	}
-	
+	//Prueba unitaria de este metodo
 	public void actualizarEquipo (Long id, EquipoModel equipo) {
 		Optional<EquipoModel> equipoFromDb = equipoRepository.findById(id);
 		Optional<GrupoModel> g = grupoRepository.findById(equipo.getGrupo().getId());
@@ -49,15 +49,15 @@ public class EquipoService {
 		
 	}
 	
+	//prueba unitaria de este metodo
 	public  ResponseEntity<EquipoModel> verificarJugadores (@RequestBody @Valid EquipoModel equipo) {
 		  Long cantidadJugadores = this.jugadorService.contarPorPais(equipo.getPais());
 		  Boolean equipoExistente = existeEquipo(equipo.getPais());
-		  System.out.println ("Ya esxiste el pais? " + equipoExistente);
-		    System.out.println ("Jugadores existentes " + cantidadJugadores);
+		  
 		    
 		    if (equipoExistente) {
 		    	
-		    	System.out.println ("El pais que desea cargar ya se encuentra registrado");
+		    	
 		    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		    }
 		    
@@ -65,11 +65,11 @@ public class EquipoService {
 		    	   List <JugadorModel> jugPorPais = this.jugadorService.obtenerPorPais(equipo.getPais());
 		   		
 		   			equipo.setJugadores(jugPorPais); 
-		   			System.out.println ("Equipo creado");
+		   			
 		   		return ResponseEntity.status(HttpStatus.CREATED).body(guardarEquipo(equipo));
 		    }else {
 		    	
-		    	System.out.println ("La cantidad de jugadores es incorrecta: necesita min 11 y maximo 26");
+		    	
 		    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		    			    	
 		    }

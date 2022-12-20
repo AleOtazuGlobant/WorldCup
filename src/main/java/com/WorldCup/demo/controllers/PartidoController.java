@@ -1,6 +1,7 @@
 package com.WorldCup.demo.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,16 +40,16 @@ public class PartidoController {
 		Boolean equipo2Exists = this.equipoService.existeEquipoPorId(partido.getEquipo2_id());		
 		
 		 if (!equipo1Exists || !equipo2Exists) {
-			 //System.out.println ("No se puede crear el partido equipo/equipos ingresados no existe");
+			
 		     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		 }
 		 
 		 if(partido.getEquipo1_id() == partido.getEquipo2_id()) {
-			//System.out.println ("No se puede crear el partido con un solo equipo");
+			
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		    	
 	    }
-		 	 //System.out.println ("partido creado");
+		 	 
 	    	 return ResponseEntity.status(HttpStatus.OK).body(this.partidoService.guardarPartido(partido));
 	    		   	        
 	}
@@ -69,6 +70,26 @@ public class PartidoController {
 	public  PartidoModel obtenerSimularPartido(@PathVariable ("id") Long id){
 		return this.partidoService.simularPartido(id);
 		
+	}
+
+    @GetMapping("/octavos")
+	public List<PartidoModel> octavos(){
+		return this.partidoService.octavos();
+	}
+    
+   @GetMapping("/cuartos")
+	public List<PartidoModel>cuartos(){
+		return this.partidoService.cuartos();
+	}
+   
+   @GetMapping("/semiFinal")
+	public List<PartidoModel> semis(){
+		return this.partidoService.semis();
+	}
+   
+   @GetMapping("/final")
+	public List<PartidoModel> finales(){
+		return this.partidoService.finales();
 	}
 		
 	@DeleteMapping( path = "/{id}")

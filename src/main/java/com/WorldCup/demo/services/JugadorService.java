@@ -2,8 +2,15 @@ package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
 import java.util.Optional;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.WorldCup.demo.models.EquipoModel;
 import com.WorldCup.demo.models.JugadorModel;
 import com.WorldCup.demo.repositories.JugadorRepository;
@@ -12,6 +19,9 @@ import com.WorldCup.demo.repositories.JugadorRepository;
 public class JugadorService {
 	@Autowired	
 	JugadorRepository jugadorRepository;
+	
+	@Autowired	
+	EquipoService equipoService;
 	
 	
 	public ArrayList<JugadorModel> obtenerJugadores(){
@@ -65,6 +75,33 @@ public class JugadorService {
 		} catch(Exception err) {
 			return false;
 		}
+	}
+	//////////////////////////////////////////
+	//Prueba unitaria
+	public ResponseEntity<JugadorModel>comprobarJugador(@RequestBody @Valid JugadorModel jugador) {
+		
+		JugadorModel existente = this.obtenerPorPasaporte(jugador.getPasaporte());
+		if(existente != null) {
+			 
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}else {
+			Long cantJugadores = this.contarPorPais(jugador.getPais());
+			
+			if(cantJugadores == 26) {
+								 
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+				 
+			}else {
+				EquipoModel equipo = this.equipoService.obtenerEquipoPorPais(jugador.getPais());
+				if (equipo != null) {			
+					jugador.setEquipo(equipo);
+				}
+				
+				JugadorModel jugadorNuevo = this.guardarJugador(jugador);
+				
+				return ResponseEntity.status(HttpStatus.CREATED).body(jugadorNuevo);
+			}						
+		}	
 	}
 
 }

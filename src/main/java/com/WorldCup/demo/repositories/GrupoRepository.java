@@ -12,8 +12,10 @@ import com.WorldCup.demo.models.GrupoModel;
 @Repository
 public interface GrupoRepository extends CrudRepository<GrupoModel, Long> {
 	public abstract Optional<GrupoModel> findById( Long id);
+	public abstract GrupoModel findByNombre(String nombre);
 	
 	Boolean existsByNombre(String nombre);
-
 	
+
+		
 }

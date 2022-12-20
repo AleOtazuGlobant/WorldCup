@@ -20,12 +20,24 @@ public class PartidoModel {
 	private String resultado;
 	private String nombre_equipo1;
 	private String nombre_equipo2;
+	private String fase;
+	private Long equipo_ganador_id;
+	private Long llaveId;
 	
-		
+	
 	public PartidoModel() {
 		super();
 	}
 
+		
+	public PartidoModel(String fase, Long equipo_ganador_id, Long llaveId) {
+		super();
+		this.fase = fase;
+		this.equipo_ganador_id = equipo_ganador_id;
+		this.llaveId = llaveId;
+	}
+
+	
 	public PartidoModel(Long id, Long equipo1_id, Long equipo2_id, int goles_equipo1, int goles_equipo2,
 			String resultado) {
 		super();
@@ -43,6 +55,38 @@ public class PartidoModel {
 		this.nombre_equipo1 = nombre_equipo1;
 		this.nombre_equipo2 = nombre_equipo2;
 	}
+	
+	
+
+	public String getFase() {
+		return fase;
+	}
+
+
+	public void setFase(String fase) {
+		this.fase = fase;
+	}
+
+
+	public Long getEquipo_ganador_id() {
+		return equipo_ganador_id;
+	}
+
+
+	public void setEquipo_ganador_id(Long equipo_ganador_id) {
+		this.equipo_ganador_id = equipo_ganador_id;
+	}
+
+
+	public Long getLlaveId() {
+		return llaveId;
+	}
+
+
+	public void setLlaveId(Long partido_llave_id) {
+		this.llaveId = partido_llave_id;
+	}
+
 
 	public String getNombre_equipo1() {
 		return nombre_equipo1;
