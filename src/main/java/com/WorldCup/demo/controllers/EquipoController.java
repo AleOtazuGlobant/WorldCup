@@ -35,9 +35,14 @@ public class EquipoController {
 			
 	@PostMapping()
 	public ResponseEntity<EquipoModel> guardarEquipo(@RequestBody @Valid EquipoModel equipo) {
-
-		return equipoService.verificarJugadores(equipo);
-	 
+		EquipoModel equipoGuardado = equipoService.guardarEquipoJugadores(equipo);
+		if (equipoGuardado == null) {
+			//primero verifico que el equipo no este creado previamente
+			// o la cantidad de jugadores no es correcta
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(equipoGuardado);
 	}
 	
 	@GetMapping( path = "/{id}")
@@ -69,6 +74,9 @@ public class EquipoController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(eq);	 
 	}
+	
+	
+
 	
 
 }

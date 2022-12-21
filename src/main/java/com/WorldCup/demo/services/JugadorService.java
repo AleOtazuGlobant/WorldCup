@@ -81,6 +81,7 @@ public class JugadorService {
 	public ResponseEntity<JugadorModel>comprobarJugador(@RequestBody @Valid JugadorModel jugador) {
 		
 		JugadorModel existente = this.obtenerPorPasaporte(jugador.getPasaporte());
+		
 		if(existente != null) {
 			 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
