@@ -25,7 +25,7 @@ public class GrupoService {
 	
 	
 		
-	public ArrayList<GrupoModel>obtenerGrupos(){
+	public List<GrupoModel>obtenerGrupos(){
 		return (ArrayList<GrupoModel>)grupoRepository.findAll();
 	}
 	
@@ -38,10 +38,15 @@ public class GrupoService {
 	
 	
 	
-	public void actualizarGrupo (Long id, GrupoModel grupo) {
-		GrupoModel grupoFromDb = grupoRepository.findById(id).get();
+	public void actualizarGrupo (Long id) {
 		
-				grupoRepository.save(grupoFromDb);
+		Optional<GrupoModel> grupoFromDb = grupoRepository.findById(id);
+		
+		if (grupoFromDb.isPresent()) {
+						
+		 GrupoModel grup = grupoFromDb.get();
+				grupoRepository.save(grup);
+		}
 	}
 			
 	public boolean eliminarGrupo (Long id) {
@@ -65,7 +70,7 @@ public class GrupoService {
 	
 	public ResponseEntity<GrupoModel> comprobarGrupo(@RequestBody @Valid GrupoModel grupo) {
 		
-		if (this.existeGrupo(grupo.getNombre())) {
+		if (Boolean.TRUE.equals(this.existeGrupo(grupo.getNombre()))) {
 			
 	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 	    	
@@ -84,22 +89,31 @@ public class GrupoService {
 	public ResponseEntity< List<PartidoModel> >partidosDeGrupo(@RequestBody @PathVariable ("id") Long id){
 		
 		Optional<GrupoModel> grupo= this.obtenerPorId(id);
+		
+				
+		if(grupo.isEmpty()) {
+			return null;
+		}
+		
 		boolean played = grupo.get().isJugado(); 
-
-		List<PartidoModel> partidosSimulados = new ArrayList<PartidoModel>();
 		
 		if (played) {
-	  				    	
-	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		  				    	
+		    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+				
 		}
-				
+			
+		
+		
+		
+		List<PartidoModel> partidosSimulados = new ArrayList<>();
 		List<EquipoModel> equipos= grupo.get().getEquipos();
-				
+		
 		EquipoModel equipo1 = equipos.get(0);
 		EquipoModel equipo2 = equipos.get(1);
 		EquipoModel equipo3 = equipos.get(2);
 		EquipoModel equipo4 = equipos.get(3);
-			
+		
 //		Generar objeto de partido y guardar en la Bd
 		PartidoModel partido1 = new PartidoModel();
 		partido1.setEquipo1_id(equipo1.getId());
@@ -145,15 +159,14 @@ public class GrupoService {
      	partidosSimulados.add(partido4Simulado);
      	partidosSimulados.add(partido5Simulado);     	
      	partidosSimulados.add(partido6Simulado);
-     
+		
      	grupo.get().setJugado(true);
-     	GrupoModel grup = grupo.get();
-     	this.guardarGrupo(grup);
-  	
-     	
-     	return ResponseEntity.status(HttpStatus.CREATED).body(partidosSimulados);
-	}
-
+     	GrupoModel grupp = grupo.get();
+     	this.guardarGrupo(grupp);
+			
+		return ResponseEntity.status(HttpStatus.CREATED).body(partidosSimulados);
+			
+		}
 	
 	
 	//SACAR MEJORES 2 DE CADA GRUPO
@@ -161,6 +174,10 @@ public class GrupoService {
 
 		//obtengo el grupo
 		Optional<GrupoModel> grupo= this.obtenerPorId(id);
+		
+		if(grupo.isEmpty()) {
+			return  List.of();
+		}
 
 		//obtengo los equipos  del grupo
 		List<EquipoModel> equipos= grupo.get().getEquipos();

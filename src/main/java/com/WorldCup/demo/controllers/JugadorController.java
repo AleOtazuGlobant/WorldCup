@@ -1,6 +1,7 @@
 package com.WorldCup.demo.controllers;
 
-import java.util.ArrayList;
+
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class JugadorController {
 	
 	
 	@GetMapping()
-	public ArrayList<JugadorModel> obtenerJugadores(){
+	public List<JugadorModel> obtenerJugadores(){
 		return jugadorService.obtenerJugadores();
 	}
 		
@@ -57,7 +58,7 @@ public class JugadorController {
 	
 	
 	@GetMapping("/query")
-	public  ArrayList<JugadorModel>obtenerJugadorPorPais(@RequestParam("pais")String pais){
+	public  List<JugadorModel>obtenerJugadorPorPais(@RequestParam("pais")String pais){
 		return this.jugadorService.obtenerPorPais(pais);
 	}
 	

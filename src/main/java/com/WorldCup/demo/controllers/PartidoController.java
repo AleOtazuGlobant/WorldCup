@@ -1,6 +1,6 @@
 package com.WorldCup.demo.controllers;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class PartidoController {
 	EquipoService equipoService;
 	
 	@GetMapping()
-	public ArrayList<PartidoModel> obtenerPartidos(){
+	public List<PartidoModel> obtenerPartidos(){
 		return partidoService.obtenerPartidos();
 	}
 	

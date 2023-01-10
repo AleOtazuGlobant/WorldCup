@@ -1,6 +1,7 @@
 package com.WorldCup.demo.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.WorldCup.demo.models.EquipoModel;
+
 import com.WorldCup.demo.models.JugadorModel;
 import com.WorldCup.demo.repositories.JugadorRepository;
 
@@ -24,7 +26,7 @@ public class JugadorService {
 	EquipoService equipoService;
 	
 	
-	public ArrayList<JugadorModel> obtenerJugadores(){
+	public List<JugadorModel> obtenerJugadores(){
 		return (ArrayList<JugadorModel>) jugadorRepository.findAll();
 	}
 	
@@ -37,7 +39,16 @@ public class JugadorService {
 	}	
 	
 	public void actualizarJugador (Long id, JugadorModel jugador) {
-		JugadorModel jugadorFromDb = jugadorRepository.findById(id).get();
+		
+				
+		Optional<JugadorModel> jugFromDb = jugadorRepository.findById(id);
+		
+		if (jugFromDb.isEmpty()) {
+			return;
+			
+		}
+		
+		JugadorModel jugadorFromDb = jugFromDb.get();
 		jugadorFromDb.setNombre(jugador.getNombre());
 		jugadorFromDb.setApellido(jugador.getApellido());
 		jugadorFromDb.setPais(jugador.getPais());
@@ -50,7 +61,7 @@ public class JugadorService {
 		return jugadorRepository.findById(id);
 	}
 	
-	public ArrayList<JugadorModel> obtenerPorPais (String pais){
+	public List<JugadorModel> obtenerPorPais (String pais){
 		return jugadorRepository.findByPais(pais);
 	}
 	
@@ -59,16 +70,23 @@ public class JugadorService {
 	}
 	
 	public boolean eliminarJugador (Long id) {
-		JugadorModel jugFromDb = jugadorRepository.findById(id).get();
-		EquipoModel equipoDelJugador = jugFromDb.getEquipo();
+		Optional<JugadorModel> jugFromDb = jugadorRepository.findById(id);
+		
+		if (jugFromDb.isEmpty()) {
+			return false;
+			
+		}
+		
+		JugadorModel jugadorFromDb = jugFromDb.get();
+		
+		EquipoModel equipoDelJugador = jugadorFromDb.getEquipo();
 		try {
 			
-			if (equipoDelJugador != null) {
-				if (equipoDelJugador.getCantJugadores()==11) {
-					
+			if (equipoDelJugador != null && equipoDelJugador.getCantJugadores()==11) {
+			
 					return false;
-				};
-			};
+				}
+				
 			
 			jugadorRepository.deleteById(id);
 			return true;
@@ -76,8 +94,8 @@ public class JugadorService {
 			return false;
 		}
 	}
-	//////////////////////////////////////////
-	//Prueba unitaria
+
+
 	public ResponseEntity<JugadorModel>comprobarJugador(@RequestBody @Valid JugadorModel jugador) {
 		
 		JugadorModel existente = this.obtenerPorPasaporte(jugador.getPasaporte());

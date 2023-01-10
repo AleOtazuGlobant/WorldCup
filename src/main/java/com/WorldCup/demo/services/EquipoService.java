@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.hamcrest.Matcher;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -24,7 +24,8 @@ public class EquipoService {
 	JugadorService jugadorService;
 	
 	
-	public ArrayList<EquipoModel>obtenerEquipos(){
+	public List<EquipoModel>obtenerEquipos(){
+
 		return (ArrayList<EquipoModel>) equipoRepository.findAll();
 	}
 	
@@ -34,31 +35,36 @@ public class EquipoService {
 	public Optional<EquipoModel> obtenerPorId(Long id){
 		return equipoRepository.findById(id);
 	}
-	//Prueba unitaria de este metodo
+
+
+
 	public void actualizarEquipo (Long id, EquipoModel equipo) {
 		Optional<EquipoModel> equipoFromDb = equipoRepository.findById(id);
+		
 		Optional<GrupoModel> g = grupoRepository.findById(equipo.getGrupo().getId());
 		
+		if(equipoFromDb.isPresent()&& g.isPresent()) {
+			
 		EquipoModel eq = equipoFromDb.get();
 		
 		eq.setPais(equipo.getPais());
 		eq.setGrupo(g.get());
 		
 		equipoRepository.save(eq);
-		
+		}
 	}
- ////////////////////////////////////////
+
 	public  EquipoModel guardarEquipoJugadores (EquipoModel equipo) {
 	    Long cantidadJugadores = this.jugadorService.contarPorPais(equipo.getPais());
 	    Boolean equipoExistente = existeEquipo(equipo.getPais());
 	  
 	    //primero verifico que el equipo no este creado previamente
-	    if (equipoExistente) {
+	    if (Boolean.TRUE.equals(equipoExistente)) {
 	    	
 	    	return null;
 	    }
 	    
-	    if (cantidadJugadores >= 11 & cantidadJugadores <= 26) {
+	    if (cantidadJugadores >= 11 && cantidadJugadores <= 26) {
 	    	List <JugadorModel> jugPorPais = this.jugadorService.obtenerPorPais(equipo.getPais());
 	   		equipo.setJugadores(jugPorPais); 
 	   		

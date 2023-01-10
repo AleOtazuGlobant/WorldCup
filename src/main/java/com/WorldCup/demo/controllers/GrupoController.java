@@ -1,6 +1,6 @@
 package com.WorldCup.demo.controllers;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -37,7 +37,7 @@ public class GrupoController {
 	
 
 	@GetMapping()
-	public  ArrayList<GrupoModel> obtenerGrupos(){
+	public  List<GrupoModel> obtenerGrupos(){
 		return grupoService.obtenerGrupos();
 	}
 	
@@ -56,8 +56,8 @@ public class GrupoController {
 	
 
 	@GetMapping(path = "/{id}/mejoresPuntos")
-	public ArrayList<EquipoModel> primerosDelGrupo(@PathVariable ("id") Long id){
-		return (ArrayList<EquipoModel>) this.grupoService.mejoresPuntajes(id);
+	public List<EquipoModel> primerosDelGrupo(@PathVariable ("id") Long id){
+		return this.grupoService.mejoresPuntajes(id);
 	}
 	
 	
@@ -83,7 +83,7 @@ public class GrupoController {
 		
 	@PutMapping( path = "/{id}")
 	public ResponseEntity<Optional<GrupoModel>>actualizarGrupo(@PathVariable ("id") Long id,@RequestBody GrupoModel grupo) {
-		this.grupoService.actualizarGrupo(id,grupo);
+		this.grupoService.actualizarGrupo(id);
 	
 		Optional<GrupoModel>group = this.grupoService.obtenerPorId(id);
 		

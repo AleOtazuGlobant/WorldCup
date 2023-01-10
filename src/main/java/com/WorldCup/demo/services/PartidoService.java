@@ -3,6 +3,8 @@ package com.WorldCup.demo.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.WorldCup.demo.models.EquipoModel;
@@ -29,7 +31,7 @@ public class PartidoService {
 	@Autowired
 	GrupoRepository grupoRepository;
 	
-	public ArrayList<PartidoModel> obtenerPartidos(){
+	public List<PartidoModel> obtenerPartidos(){
 		
 		return (ArrayList<PartidoModel>) partidoRepository.findAll();
 			
@@ -44,7 +46,14 @@ public class PartidoService {
 	}
 	
 	public void actualizarPartido (Long id, PartidoModel partido) {
-		PartidoModel encuentro = partidoRepository.findById(id).get();
+		
+		Optional<PartidoModel> encuentr = partidoRepository.findById(id);
+		
+		if(encuentr.isEmpty()) {
+			return;
+		}
+		
+		PartidoModel encuentro = encuentr.get();
 		
 		encuentro.setNombre_equipo1(partido.getNombre_equipo1());
 		encuentro.setNombre_equipo2(partido.getNombre_equipo2());
@@ -73,10 +82,24 @@ public class PartidoService {
 	}
 	
 	public PartidoModel simularPartido(Long id) {
-		PartidoModel match = partidoRepository.findById(id).get();	
+		
+		Optional <PartidoModel> game = partidoRepository.findById(id);	
+		
+		if( game.isEmpty()) {
+			return null;
+		}
+		
+		PartidoModel match = game.get();
 		String fasePartido = match.getFase();
 		Optional<EquipoModel> equipoUno = equipoService.obtenerPorId(match.getEquipo1_id());
 		Optional<EquipoModel> equipoDos = equipoService.obtenerPorId(match.getEquipo2_id());
+		
+		if(equipoUno.isEmpty()) {
+			return null;
+		}
+		if(equipoDos.isEmpty()) {
+			return null;
+		}
 		Long ganadorUno = equipoUno.get().getId(); 
 		Long ganadorDos = equipoDos.get().getId(); 
 		EquipoModel equipo1 = equipoUno.get();
@@ -85,58 +108,61 @@ public class PartidoService {
 		String equipo2Pais = equipoDos.get().getPais();
 		int puntaje1 = 0;
 		int puntaje2 = 0;
-		String	resul = "";
-					
-		int goles_equipo1 = (int)(Math.random()*5);
-		int goles_equipo2 = (int)(Math.random()*5);
+		final String ganador = "Gana";
+		String	resul;
+				
+		Random r = new Random();
+		int golesEquipo1 = r.nextInt(5);  
+		int golesEquipo2 = r.nextInt(5); 
+		
 		
 		//compruebo la fase partido
 		//si es null estoy en fase grupos necesito poner puntos
 		
 		if (fasePartido == null) {
 			
-			if (goles_equipo2 == goles_equipo1){
+			if (golesEquipo2 == golesEquipo1){
 					puntaje1 += 1;
 					puntaje2 += 1;	 
 					resul = "Empate";
 			}
 			
-			if (goles_equipo1 > goles_equipo2) {
+			if (golesEquipo1 > golesEquipo2) {
 				
 				puntaje1 += 3;				
-				resul = "Gana " + equipo1Pais;		
+				resul = ganador + equipo1Pais;		
 				
 			}else {
 				
 				puntaje2 += 3;
-				resul = "Gana " + equipo2Pais;
+				resul = ganador + equipo2Pais;
 				
 		    } 
-			
-	   //fase distinta de null tengo que poner en la tabla el id del ganador 
+//fase distinta de null tengo que poner en la tabla el id del ganador 
 			
 		}else {
 			
-			if (goles_equipo2 == goles_equipo1){
+			if (golesEquipo2 == golesEquipo1){
 											
 					match.setEquipo_ganador_id(ganadorUno);	
-					resul = "Gana " + equipo1Pais;		
+					resul = ganador + equipo1Pais;		
 				}
 			
-			}if (goles_equipo1 > goles_equipo2) {
+			}if (golesEquipo1 > golesEquipo2) {
 				
 					match.setEquipo_ganador_id(ganadorUno);	
-					resul = "Gana " + equipo1Pais;		
+					resul = ganador+ equipo1Pais;		
 				
 			}else {
 				
 				match.setEquipo_ganador_id(ganadorDos);		
-				resul = "Gana " + equipo2Pais;
+				resul = ganador + equipo2Pais;
 			
-			}					
+			}	
+			
 		 
-		match.setGoles_equipo1(goles_equipo1);
-		match.setGoles_equipo2(goles_equipo2);
+		match.setGoles_equipo1(golesEquipo1);
+		match.setGoles_equipo2(golesEquipo2);
 		match.setNombre_equipo1(equipoUno.get().getPais());
 		match.setNombre_equipo2(equipoDos.get().getPais());
 		match.setResultado(resul);
@@ -160,8 +186,9 @@ public class PartidoService {
 	
 		public List<PartidoModel>octavos(){
 						
-			//ArrayList<GrupoModel> grupos = this.obtenerGrupos();
-			List<PartidoModel> partidosOctavosSimulados = new ArrayList<PartidoModel>();
+			
+			List<PartidoModel> partidosOctavosSimulados = new ArrayList<>();
+			final String octavos = "octavos";  
 			
 			GrupoModel grupoA = this.obtenerPorNombre("A");
 			List<EquipoModel> octavosA = this.grupoService.mejoresPuntajes(grupoA.getId());
@@ -215,56 +242,56 @@ public class PartidoService {
 			PartidoModel partido1 = new PartidoModel();
 			partido1.setEquipo1_id(primerEquipoA.getId());
 			partido1.setEquipo2_id(segundoEquipoB.getId());
-			partido1.setFase("octavos");
+			partido1.setFase(octavos);
 			partido1.setLlaveId(llave1);
 			partido1 =this.guardarPartido(partido1);
 		
 			PartidoModel partido2 = new PartidoModel();
 			partido2.setEquipo1_id(primerEquipoB.getId());
 			partido2.setEquipo2_id(segundoEquipoA.getId());
-			partido2.setFase("octavos");
+			partido2.setFase(octavos);
 			partido2.setLlaveId(llave3);
 			partido2 = this.guardarPartido(partido2);
 			
 			PartidoModel partido3 = new PartidoModel();
 			partido3.setEquipo1_id(primerEquipoD.getId());
 			partido3.setEquipo2_id(segundoEquipoC.getId());
-			partido3.setFase("octavos");
+			partido3.setFase(octavos);
 			partido3.setLlaveId(llave3);
 			partido3 = this.guardarPartido(partido3);
 			
 			PartidoModel partido4 = new PartidoModel();
 			partido4.setEquipo1_id(primerEquipoC.getId());
 			partido4.setEquipo2_id(segundoEquipoD.getId());
-			partido4.setFase("octavos");
+			partido4.setFase(octavos);
 			partido4.setLlaveId(llave1);
 			partido4 = this.guardarPartido(partido4);						
 			
 			PartidoModel partido5 = new PartidoModel();
 			partido5.setEquipo1_id(primerEquipoE.getId());
 			partido5.setEquipo2_id(segundoEquipoF.getId());
-			partido5.setFase("octavos");
+			partido5.setFase(octavos);
 			partido5.setLlaveId(llave2);
 			partido5 = this.guardarPartido(partido5);
 			
 			PartidoModel partido6 = new PartidoModel();
 			partido6.setEquipo1_id(primerEquipoF.getId());
 			partido6.setEquipo2_id(segundoEquipoE.getId());
-			partido6.setFase("octavos");
+			partido6.setFase(octavos);
 			partido6.setLlaveId(llave4);
 			partido6 = this.guardarPartido(partido6);
 			
 			PartidoModel partido7 = new PartidoModel();
 			partido7.setEquipo1_id(primerEquipoG.getId());
 			partido7.setEquipo2_id(segundoEquipoH.getId());
-			partido7.setFase("octavos");
+			partido7.setFase(octavos);
 			partido7.setLlaveId(llave2);
 			partido7 = this.guardarPartido(partido7);
 			
 			PartidoModel partido8 = new PartidoModel();
 			partido8.setEquipo1_id(primerEquipoH.getId());
 			partido8.setEquipo2_id(segundoEquipoG.getId());
-			partido8.setFase("octavos");
+			partido8.setFase(octavos);
 			partido8.setLlaveId(llave4);
 			partido8 = this.guardarPartido(partido8);		
 			
@@ -301,6 +328,7 @@ public class PartidoService {
 		
 		
 		public List<PartidoModel>cuartos(){
+			final String cuartos = "cuartos"; 
 			// llaves de cuartos
 			Long llave1 = (long) 1;
 			Long llave2 = (long) 2;
@@ -310,50 +338,50 @@ public class PartidoService {
 			Long llave5 = (long) 5;
 			Long llave6 = (long) 6;
 			
-			List<PartidoModel> partidosCuartos = new ArrayList<PartidoModel>();		
+			List<PartidoModel> partidosCuartos = new ArrayList<>();		
 						
-			List<PartidoModel> Grupo1Cuartos = this.obtenerPorLlave(llave1);
-			Long equipoIdGanador1 = Grupo1Cuartos.get(0).getEquipo_ganador_id();
-		    Long equipoIdGanador2 = Grupo1Cuartos.get(1).getEquipo_ganador_id();
+			List<PartidoModel> grupo1Cuartos = this.obtenerPorLlave(llave1);
+			Long equipoIdGanador1 = grupo1Cuartos.get(0).getEquipo_ganador_id();
+		    Long equipoIdGanador2 = grupo1Cuartos.get(1).getEquipo_ganador_id();
 		    
-		    List<PartidoModel> Grupo2Cuartos = this.obtenerPorLlave(llave2);
-			Long equipoIdGanador3 = Grupo2Cuartos.get(0).getEquipo_ganador_id();
-		    Long equipoIdGanador4 = Grupo2Cuartos.get(1).getEquipo_ganador_id();		    
+		    List<PartidoModel> grupo2Cuartos = this.obtenerPorLlave(llave2);
+			Long equipoIdGanador3 = grupo2Cuartos.get(0).getEquipo_ganador_id();
+		    Long equipoIdGanador4 = grupo2Cuartos.get(1).getEquipo_ganador_id();		    
 		 		  
-		    List<PartidoModel> Grupo3Cuartos = this.obtenerPorLlave(llave3);
-			Long equipoIdGanador5 = Grupo3Cuartos.get(0).getEquipo_ganador_id();
-		    Long equipoIdGanador6 = Grupo3Cuartos.get(1).getEquipo_ganador_id();
+		    List<PartidoModel> grupo3Cuartos = this.obtenerPorLlave(llave3);
+			Long equipoIdGanador5 = grupo3Cuartos.get(0).getEquipo_ganador_id();
+		    Long equipoIdGanador6 = grupo3Cuartos.get(1).getEquipo_ganador_id();
 		    
-		    List<PartidoModel> Grupo4Cuartos = this.obtenerPorLlave(llave4);
-			Long equipoIdGanador7 = Grupo4Cuartos.get(0).getEquipo_ganador_id();
-		    Long equipoIdGanador8 = Grupo4Cuartos.get(1).getEquipo_ganador_id();					    		   
+		    List<PartidoModel> grupo4Cuartos = this.obtenerPorLlave(llave4);
+			Long equipoIdGanador7 = grupo4Cuartos.get(0).getEquipo_ganador_id();
+		    Long equipoIdGanador8 = grupo4Cuartos.get(1).getEquipo_ganador_id();					    		   
 		    		    
 		    // Guardar los partidos una vez linkeados
 			PartidoModel partido1 = new PartidoModel();
 			partido1.setEquipo1_id(equipoIdGanador1);
 			partido1.setEquipo2_id(equipoIdGanador2);
-			partido1.setFase("cuartos");
+			partido1.setFase(cuartos);
 			partido1.setLlaveId(llave5);
 			partido1 = this.guardarPartido(partido1);
 									
 			PartidoModel partido2 = new PartidoModel();
 			partido2.setEquipo1_id(equipoIdGanador3);
 			partido2.setEquipo2_id(equipoIdGanador4);
-			partido2.setFase("cuartos");
+			partido2.setFase(cuartos);
 			partido2.setLlaveId(llave5);
 			partido2 = this.guardarPartido(partido2);
 			
 			PartidoModel partido3 = new PartidoModel();
 			partido3.setEquipo1_id(equipoIdGanador5);
 			partido3.setEquipo2_id(equipoIdGanador6);
-			partido3.setFase("cuartos");
+			partido3.setFase(cuartos);
 			partido3.setLlaveId(llave6);
 			partido3 = this.guardarPartido(partido3);
 			
 			PartidoModel partido4 = new PartidoModel();
 			partido4.setEquipo1_id(equipoIdGanador7);
 			partido4.setEquipo2_id(equipoIdGanador8);
-			partido4.setFase("cuartos");
+			partido4.setFase(cuartos);
 			partido4.setLlaveId(llave6);
 			partido4 = this.guardarPartido(partido4);
 			
@@ -374,32 +402,34 @@ public class PartidoService {
 
 		public List<PartidoModel> semis() {
 			// llaves de semi
+			final String semis = "semis"; 
+			
 			Long llave5 = (long) 5;
 			Long llave6 = (long) 6;
 			Long llave7 = (long) 7;
 			
-			List<PartidoModel> partidosSemis = new ArrayList<PartidoModel>();				
+			List<PartidoModel> partidosSemis = new ArrayList<>();				
 									
-			List<PartidoModel> Grupo1Semis = this.obtenerPorLlave(llave5);
-			Long eqIdGanador1 =Grupo1Semis.get(0).getEquipo_ganador_id();
-			Long eqIdGanador2 = Grupo1Semis.get(1).getEquipo_ganador_id();
+			List<PartidoModel>  grupo1Semis = this.obtenerPorLlave(llave5);
+			Long eqIdGanador1 = grupo1Semis.get(0).getEquipo_ganador_id();
+			Long eqIdGanador2 = grupo1Semis.get(1).getEquipo_ganador_id();
 					    
-			List<PartidoModel> Grupo2Semis = this.obtenerPorLlave(llave6);
-			Long eqIdGanador3 = Grupo2Semis.get(0).getEquipo_ganador_id();
-			Long eqIdGanador4 = Grupo2Semis.get(1).getEquipo_ganador_id();
+			List<PartidoModel> grupo2Semis = this.obtenerPorLlave(llave6);
+			Long eqIdGanador3 = grupo2Semis.get(0).getEquipo_ganador_id();
+			Long eqIdGanador4 = grupo2Semis.get(1).getEquipo_ganador_id();
 			
 			  // Guardar los partidos una vez linkeados
 			PartidoModel partido1 = new PartidoModel();
 			partido1.setEquipo1_id(eqIdGanador1);
 			partido1.setEquipo2_id(eqIdGanador2);
-			partido1.setFase("semis");
+			partido1.setFase(semis);
 			partido1.setLlaveId(llave7);
 			partido1 = this.guardarPartido(partido1);			
 						
 			PartidoModel partido2 = new PartidoModel();
 			partido2.setEquipo1_id(eqIdGanador3);
 			partido2.setEquipo2_id(eqIdGanador4);
-			partido2.setFase("semis");
+			partido2.setFase(semis);
 			partido2.setLlaveId(llave7);
 			partido2 = this.guardarPartido(partido2);					
 
@@ -416,10 +446,10 @@ public class PartidoService {
 
 		public List<PartidoModel> finales() {
 			Long llave7 = (long) 7;			
-			List<PartidoModel> partidosfinales = new ArrayList<PartidoModel>();													
-			List<PartidoModel> Finalistas = this.obtenerPorLlave(llave7);
-			Long eqIdGanador1 = Finalistas.get(0).getEquipo_ganador_id();
-			Long eqIdGanador2 = Finalistas.get(1).getEquipo_ganador_id();					    
+			List<PartidoModel> partidosfinales = new ArrayList<>();													
+			List<PartidoModel> finalistas = this.obtenerPorLlave(llave7);
+			Long eqIdGanador1 = finalistas.get(0).getEquipo_ganador_id();
+			Long eqIdGanador2 = finalistas.get(1).getEquipo_ganador_id();					    
 			
 			  // Guardar los partidos una vez linkeados
 			PartidoModel partidoFinal = new PartidoModel();

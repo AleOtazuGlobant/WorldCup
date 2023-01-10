@@ -1,6 +1,7 @@
 package com.WorldCup.demo.controllers;
 
-import java.util.ArrayList;
+
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class EquipoController {
 	JugadorService jugadorService;
 	
 	@GetMapping()
-	public  ArrayList<EquipoModel> obtenerEquipos(){
+	public  List<EquipoModel> obtenerEquipos(){
 		return equipoService.obtenerEquipos();
 	}
 			
